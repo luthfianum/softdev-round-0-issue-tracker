@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Issue Tracker - Login</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://unpkg.com/flowbite@1.3.4/dist/flowbite.min.css" />
+  <link rel="stylesheet" href="../css/index.css" />
+
+  <!-- Tailwind Js -->
+  <script src="https://unpkg.com/flowbite@1.3.4/dist/flowbite.js"></script>
+  <!-- Cookies Js -->
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+  <!-- DatePicker Js -->
+  <script src="https://unpkg.com/flowbite@1.3.4/dist/datepicker.js"></script>
+
+
+</head>
+
+<body>
+  <!-- Navbar begin -->
+  <nav class="bg-transparent border-gray-200 px-2 sm:px-4 py-5">
+    <div class="container flex flex-wrap justify-between items-center mx-auto">
+      <a href="#" class="flex">
+        <span class="text-primary self-center text-2xl font-bold whitespace-nowrap">Issue Tracker</span>
+      </a>
+      <button type="button"
+        class="text-primary border border-primary hover:text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 m-2 text-center inline-flex items-center ">
+        Log out
+      </button>
+    </div>
+  </nav>
+  <!-- Navbar End -->
+
+  <!--  -->
+  <div class="flex justify-between mx-4 my-4">
+    <div class="flex">
+      <select id="sort" onchange="filtering()"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/3 p-2.5 m-2">
+        <option value="1" checked>Sort: Newest</option>
+        <option value="0">Sort: Latest</option>
+      </select>
+      <select id="tag_filter" onchange="filtering()"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/3 p-2.5 m-2">
+        <option checked>All</option>
+        <option>Open</option>
+        <option>Urgent</option>
+        <option>In Progress</option>
+        <option>In Review</option>
+        <option>Resolved</option>
+        <option>Closed</option>
+      </select>
+      <div date-rangepicker datepicker-buttons class="flex items-center ml-2">
+        <div class="relative">
+          <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+            <svg class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                clip-rule="evenodd"></path>
+            </svg>
+          </div>
+          <input name="start" type="text" id="start" onfocusout="filtering()" 
+            class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Start">
+        </div>
+        <span class="mx-4 text-gray-500">to</span>
+        <div class="relative">
+          <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+            <svg class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                clip-rule="evenodd"></path>
+            </svg>
+          </div>
+          <input name="end" type="text" id="end" onfocusout="filtering()"
+            class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="End">
+        </div>
+      </div>
+    </div>
+    <button type="button"
+      class="text-white bg-primary hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 m-2 text-center inline-flex items-center ">
+      Add Issue
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+      </svg>
+    </button>
+  </div>
+  <!--  -->
+
+  <!-- Content Begin -->
+  <div class="flex flex-col mx-4">
+    <div class="overflow-x-auto shadow-md sm:rounded-lg">
+      <div class="inline-block min-w-full align-middle">
+        <div class="overflow-hidden ">
+          <table class="min-w-full divide-y divide-gray-200 table-fixed ">
+            <thead class="bg-gray-100 dark:bg-gray-700">
+              <tr>
+                <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">
+                  Judul
+                </th>
+                <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">
+                  Deskripsi
+                </th>
+                <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase">
+                  Tag
+                </th>
+                <th scope="col"
+                  class="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase">
+                  Edit
+                </th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200 " id="data_content">
+              <tr class="hover:bg-gray-100">
+                <td class="py-3 px-6 text-sm font-medium text-gray-900 whitespace-nowrap">Issue 1
+                </td>
+                <td class="py-3 px-6 text-sm font-medium text-gray-500 whitespace-nowrap">
+                  <button type="button"
+                    class="text-white text-sm bg-primary hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 text-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Read
+                    More</button>
+                </td>
+                <td class="py-3 px-6 text-sm font-medium text-gray-900 whitespace-nowrap">
+                  <span class="bg-green-200 text-green-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded">Done</span>
+                </td>
+                <td class="py-3 px-6 text-sm font-medium text-right whitespace-nowrap flex justify-center">
+                  <button type="button"
+                    class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center mr-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                      </path>
+                    </svg>
+                  </button>
+                  <button type="button"
+                    class="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center mr-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
+                      </path>
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Content End -->
+
+  <!-- Js -->
+  <script src="../js/dashboard.js"></script>
+
+</body>
+
+</html>
