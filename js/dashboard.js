@@ -102,4 +102,9 @@ const display_data = (items) => {
   }
 }
 
+const logout = () => {
+  Cookies.remove('ck');
+  window.location.replace("./index.html");
+}
+
 filtering();
